@@ -2,17 +2,6 @@ import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
-const options = {
-  enableTime: true,
-  time_24hr: true,
-  defaultDate: new Date(),
-  minuteIncrement: 1,
-  onClose(selectedDates) {
-    console.log(selectedDates[0]);
-    ChekDateWithCurrent(selectedDates[0]);
-  },
-};
-
 // Знаходження елементів
 const inputDateEl = document.getElementById('datetime-picker');
 const btnStart = document.querySelector('button[data-start]');
@@ -26,28 +15,43 @@ let currentDate = null;
 let formatTime = {};
 let timerID = null;
 
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  onClose(selectedDates) {
+    console.log(selectedDates[0]);
+    futureDate = selectedDates[0];
+    ChekDateWithCurrent(selectedDates[0]);
+  },
+};
+
  btnStart.addEventListener('click', onStartBtnClick)
 // Ініціалізація бібліотеки
 const fp = flatpickr(inputDateEl, options);
 btnStart.setAttribute('disabled', true);
 
 function onStartBtnClick(evt) {
-  let deltaDays = futureDate.getTime() - currentDate.getTime()
+  let timeDifference = futureDate.getTime() - currentDate.getTime()
   btnStart.setAttribute('disabled', true);
+  inputDateEl.setAttribute('disabled', true);
   timerID = setInterval(() => {
-    deltaDays -= 1000;
-    formatTime = convertMs(deltaDays)
-    console.log(formatTime);
+    // Зупинка таймеру 
+    if (timeDifference < 1000) {
+      clearInterval(timerID);
+      inputDateEl.removeAttribute('disabled');
+      return Notify.success('The Time is out');
+    }
+        
+    timeDifference -= 1000;
+    formatTime = convertMs(timeDifference)
     daysEl.textContent = addLeadingZero(formatTime.days);
     hoursEl.textContent = addLeadingZero(formatTime.hours);
     minutesEl.textContent = addLeadingZero(formatTime.minutes);
     secondsEl.textContent = addLeadingZero(formatTime.seconds);
-  }, 1000);
-  if (deltaDays < 1000) {
-    clearInterval(timerID);
-    Notify.success('The End');
+}, 1000);
 
-  }
 }
 
 function addLeadingZero(value) {
@@ -65,7 +69,7 @@ function ChekDateWithCurrent(selectedDates) {
     return;
   }
   btnStart.removeAttribute('disabled');
-  futureDate = fp.selectedDates[0];
+  // futureDate = fp.selectedDates[0];
 }
 
 function convertMs(ms) {
