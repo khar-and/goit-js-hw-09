@@ -12,6 +12,13 @@ function onSubmitForm(evt) {
   let inpDelay = Number(delayEl.value);
   const inpStep = Number(stepEl.value);
   const inpAmount = Number(amountEl.value);
+  
+  if (inpDelay < 0 || inpStep < 0 || inpAmount <= 0) {
+    Notify.failure(`❌ 
+The values ​​entered in the text fields must be greater than 0`);
+    return;
+  }
+  
   for (let i = 0; i < inpAmount; i+=1) {
     createPromise(i, inpDelay)
     .then(({ position, delay }) => {
