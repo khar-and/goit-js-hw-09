@@ -12,7 +12,7 @@ function onStartClick(evt) {
     btnStart.setAttribute('disabled', true);
     btnStop.removeAttribute('disabled');
     
-    colorid = setInterval(() => {
+    let colorid = setInterval(() => {
         bodyEl.style.backgroundColor = getRandomHexColor()
     }, 1000);
 
