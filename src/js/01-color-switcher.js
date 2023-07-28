@@ -2,7 +2,7 @@ const btnStart = document.querySelector('button[data-start]');
 const btnStop = document.querySelector('button[data-stop]');
 const bodyEl = document.querySelector('body');
 
-let timerid = null;
+let colorid = null;
 btnStop.setAttribute('disabled', true);
 
 btnStart.addEventListener('click', onStartClick);
@@ -12,9 +12,10 @@ function onStartClick(evt) {
     btnStart.setAttribute('disabled', true);
     btnStop.removeAttribute('disabled');
     
-    let colorid = setInterval(() => {
+        colorid = setInterval(() => {
         bodyEl.style.backgroundColor = getRandomHexColor()
     }, 1000);
+    
 
 }
 
