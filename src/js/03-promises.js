@@ -19,7 +19,7 @@ The values ​​entered in the text fields must be greater than 0`);
     return;
   }
   
-  for (let i = 0; i < inpAmount; i+=1) {
+  for (let i = 1; i <= inpAmount; i+=1) {
     createPromise(i, inpDelay)
     .then(({ position, delay }) => {
     Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
